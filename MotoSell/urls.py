@@ -20,5 +20,6 @@ from . import views
 app_name = 'MotoSell'
 urlpatterns = [
     path('', views.WszystkieOpublikowaneOferty.as_view(), name="home"),
-    path('', views.WszystkieOpublikowaneOfertyUzytkownika.as_view(), name="opublikowane-uzytkownika"),
+    path('opublikowane-uzytkownika/', views.WszystkieOpublikowaneOfertyUzytkownika.as_view(), name="opublikowane-uzytkownika"),
+    path('publikuj/<int:car_id>', views.publikuj, name="publikuj"),
 ]

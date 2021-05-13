@@ -57,3 +57,12 @@ class EdytujOferte(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user == car.uzytkownik:
             return True
         return False
+
+
+def publikuj(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+
+    if request.user == car.uzytkownik:
+        car.data_publikacji = datetime.today()
+        car.save()
+    return reverse('MotoSell:opublikowane-uzytkownika')
