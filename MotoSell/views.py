@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.contrib.auth.models import User
 from .models import Car
 from datetime import datetime
@@ -27,7 +27,7 @@ class WszystkieOpublikowaneOfertyUzytkownika(ListView):
         return Car.objects.filter(uzytkownik = user).order_by('-data_publikacji')
 
 
-class DodajKsiazke(LoginRequiredMixin, CreateView):
+class DodajOferte(LoginRequiredMixin, CreateView):
     model = Car
     fields = ['tytul', 'opis', 'kategoria', 'marka', 'model', 'rok_produkcji', 'przebieg', 'pojemnosc_skokowa', 'moc', 'rodzaj_paliwa', 'zdjecie', 'data_dodania', 'data_publikacji']
     template_name = "MotoSell/dodaj.html"
@@ -38,3 +38,22 @@ class DodajKsiazke(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.uzytkownik = self.request.user
         return super().form_valid(form)
+
+
+class EdytujOferte(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Car
+    fields = ['tytul', 'opis', 'kategoria', 'marka', 'model', 'rok_produkcji', 'przebieg', 'pojemnosc_skokowa', 'moc', 'rodzaj_paliwa', 'zdjecie', 'data_dodania', 'data_publikacji']
+    template_name = "MotoSell/edytuj.html"
+
+    def form_valid(self, form):
+        form.instance.uzytkownik = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('MotoSell:opublikowane-uzytkownika')
+
+    def test_func(self):
+        car = self.get_object()
+        if self.request.user == car.uzytkownik:
+            return True
+        return False
