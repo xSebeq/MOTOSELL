@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from .models import Car
 from datetime import datetime
@@ -66,3 +66,14 @@ def publikuj(request, car_id):
         car.data_publikacji = datetime.today()
         car.save()
     return reverse('MotoSell:opublikowane-uzytkownika')
+
+
+class UsunOferte(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Car
+    success_url = reverse('MotoSell:home')
+
+    def test_func(self):
+        car = self.get_object()
+        if self.request.user == car.uzytkownik:
+            return True
+        return False

@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'MotoSell'
 urlpatterns = [
     path('', views.WszystkieOpublikowaneOferty.as_view(), name="home"),
     path('opublikowane-uzytkownika/', views.WszystkieOpublikowaneOfertyUzytkownika.as_view(), name="opublikowane-uzytkownika"),
+    path('dodaj/', views.DodajOferte.as_view(), name="dodaj"),
+    path('edytuj/<int:pk>', views.EdytujOferte.as_view(), name="edytuj"),
+    path('usun/<int:pk>', views.UsunOferte.as_view(), name="usun"),
     path('publikuj/<int:car_id>', views.publikuj, name="publikuj"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
