@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from users import views
+from django.contrib.auth import views as aviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('MotoSell.urls')),
+    path('zarejestruj/', views.register, name="zarejestruj"),
+    path('zaloguj/', aviews.LoginView.as_view(template_name="users/zaloguj.html"), name="zaloguj"),
+    path('wyloguj/', aviews.LogoutView.as_view(template_name="users/wyloguj.html"), name="wyloguj"),
 ]
