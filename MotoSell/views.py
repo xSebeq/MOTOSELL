@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Car
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
 
 
 class WszystkieOpublikowaneOferty(ListView):
@@ -65,12 +66,12 @@ def publikuj(request, car_id):
     if request.user == car.uzytkownik:
         car.data_publikacji = datetime.today()
         car.save()
-    return reverse('MotoSell:opublikowane-uzytkownika')
+    return reverse_lazy('MotoSell:opublikowane-uzytkownika')
 
 
 class UsunOferte(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Car
-    success_url = reverse('MotoSell:home')
+    success_url = reverse_lazy('MotoSell:home')
 
     def test_func(self):
         car = self.get_object()
