@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MotoSell.apps.MotosellConfig',
+    'crispy_forms',
+    'softdelete',
 ]
 
 MIDDLEWARE = [
