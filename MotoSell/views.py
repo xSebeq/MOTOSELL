@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.shortcuts import render, get_object_or_404, reverse
+from django.views.generic import ListView, CreateView
 from django.contrib.auth.models import User
 from .models import Car
 from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 class WszystkieOpublikowaneOferty(ListView):
@@ -24,3 +25,16 @@ class WszystkieOpublikowaneOfertyUzytkownika(ListView):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.request.user)
         return Car.objects.filter(uzytkownik = user).order_by('-data_publikacji')
+
+
+class DodajKsiazke(LoginRequiredMixin, CreateView):
+    model = Car
+    fields = ['tytul', 'opis', 'kategoria', 'marka', 'model', 'rok_produkcji', 'przebieg', 'pojemnosc_skokowa', 'moc', 'rodzaj_paliwa', 'zdjecie', 'data_dodania', 'data_publikacji']
+    template_name = "MotoSell/dodaj.html"
+
+    def get_success_url(self):
+        return reverse('MotoSell:home')
+
+    def form_valid(self, form):
+        form.instance.uzytkownik = self.request.user
+        return super().form_valid(form)
