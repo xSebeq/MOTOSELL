@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, HttpResponseRedirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from .models import Car
@@ -34,7 +34,7 @@ class DodajOferte(LoginRequiredMixin, CreateView):
     template_name = "MotoSell/dodaj.html"
 
     def get_success_url(self):
-        return reverse('MotoSell:home')
+        return reverse_lazy('MotoSell:home')
 
     def form_valid(self, form):
         form.instance.uzytkownik = self.request.user
@@ -66,12 +66,12 @@ def publikuj(request, car_id):
     if request.user == car.uzytkownik:
         car.data_publikacji = datetime.today()
         car.save()
-    return reverse_lazy('MotoSell:opublikowane-uzytkownika')
+    return HttpResponseRedirect(reverse('MotoSell:opublikowane-uzytkownika'))
 
 
 class UsunOferte(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Car
-    success_url = reverse_lazy('MotoSell:home')
+    success_url = reverse_lazy('MotoSell:opublikowane-uzytkownika')
 
     def test_func(self):
         car = self.get_object()

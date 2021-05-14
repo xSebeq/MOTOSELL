@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>MotoSell - {{ title }}</title>
+    {% else %}
+        <title>MotoSell</title>
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+<body>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url "MotoSell:home" %}" class="nav-link px-2 text-secondary">MotoSell</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'MotoSell:opublikowane-uzytkownika' %}" class="nav-link px-2 text-white">Moje oferty</a></li>
+                    <li><a href="{% url 'MotoSell:dodaj' %}" class="nav-link px-2 text-white">Dodaj oferte</a></li>
+                {% endif %}
+            </ul>
+
+            {% if user.is_authenticated %}
+            <div class="text-end">
+                {{ user.get_username}} |
+                <a href="{% url 'wyloguj' %}" class="text-decoration-none text-warning">Wyloguj</a>
+            </div>
+            {% else %}
+            <div class="text-end">
+                <a href="{% url 'zaloguj' %}"><button type="button" class="btn btn-outline-light me-2">Zaloguj</button></a>
+                <a href="{% url 'zarejestruj' %}"><button type="button" class="btn btn-warning">Zarejestruj</button></a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    {% block content %}
+    {% endblock content %}
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+</body>
+</html>

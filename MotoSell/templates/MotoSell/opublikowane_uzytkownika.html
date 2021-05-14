@@ -1,10 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "MotoSell/base.html" %}
 
-</body>
-</html>
+
+
+{% block content %}
+    <div class="row d-flex justify-content-center">
+    {% if cars %}
+        <div class="card-group col-md-12 mt-3">
+            {% for car in cars %}
+                <div class="col-md-4 p-1">
+                    <div class="card mb-4 box-shadow">
+                        <img class="card-img-top" src="{{ car.zdjecie.url }}" alt="Card image cap">
+                        <div class="card-body h-100">
+                            <h5>{{ car.tytul }}</h5>
+                            <h6>{{ car.rok_produkcji }}</h6>
+                            <p class="card-text">
+                            <h6>{{ car.opis }}</h6> <br>
+                            Kategoria: {{ car.kategoria }} <br>
+                            Marka: {{ car.marka }} <br>
+                            Model: {{ car.model }} <br>
+                            Przebieg: {{ car.przebieg }} km <br>
+                            Pojemność skokowa: {{ car.pojemnosc_skokowa }} cm3 <br>
+                            Moc: {{ car.moc}} KM <br>
+                            Rodzaj paliwa: {{ car.rodzaj_paliwa }} <br>
+                            Data dodania: {{ car.data_dodania|date:"j.m.Y" }} <br>
+                            Data publikacji: {{ car.data_publikacji|date:"j.m.Y" }} <br>
+                            </p>
+                            <div class="text-end">
+                                <small class="text-muted">{{ car.uzytkownik }}</small>
+                            </div>
+                                <div class="text-center m-3">
+                                    <a href="{% url 'MotoSell:edytuj' car.id %}" class="link-warning"><button type="button" class="btn btn-warning m-1">Edytuj</button></a>
+                                    <a href="{% url 'MotoSell:usun' car.id %}" class="link-danger"><button type="button" class="btn btn-danger m-1">Usuń</button></a>
+                                    {% if not car.data_publikacji %}
+                                        <a href="{% url 'MotoSell:publikuj' car.id %}" class="link-primary"><button type="button" class="btn btn-primary m-1">Publikuj</button></a>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1 class="m-5" >Nie dodano jeszcze żadnego ogłoszenia</h1>
+    {% endif %}
+    </div>
+    {% if is_paginated %}
+        <div class="row-12 mt-3">
+            <div class="col text-center">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-warning mb-4" href="?page=1">Pierwsza strona</a>
+                    <a class="btn  btn-outline-warning mb-4" href="?page={{ page_obj.previous_page_number }}">Poprzednia</a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class="btn btn-warning mb-4" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class="btn btn-outline-warning mb-4" href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a class="btn btn-outline-warning mb-4" href="?page={{ page_obj.next_page_number }}">Następna</a>
+                    <a class="btn btn-outline-warning mb-4" href="?page={{ page_obj.paginator.num_pages }}">Ostatnia strona</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'MotoSell/base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+{% endblock content %}

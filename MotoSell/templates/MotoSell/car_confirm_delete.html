@@ -1,0 +1,36 @@
+{% extends 'MotoSell/base.html' %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row d-flex justify-content-center">
+        <div class="col-md-4 p-1">
+            <div class="card mb-1 box-shadow">
+                <img class="card-img-top" src="{{ car.zdjecie.url }}" alt="Card image cap">
+                <div class="card-body h-100">
+                    <h5>{{ car.tytul }}</h5>
+                    <h6>{{ car.rok_produkcji }}</h6>
+                    <p class="card-text">
+                    <h6>{{ car.opis }}</h6> <br>
+                    Kategoria: {{ car.kategoria }} <br>
+                    Marka: {{ car.marka }} <br>
+                    Model: {{ car.model }} <br>
+                    Przebieg: {{ car.przebieg }} km <br>
+                    Pojemność skokowa: {{ car.pojemnosc_skokowa }} cm3 <br>
+                    Moc: {{ car.moc}} KM <br>
+                    Rodzaj paliwa: {{ car.rodzaj_paliwa }} <br>
+                    Data dodania: {{ car.data_dodania|date:"j.m.Y" }} <br>
+                    Data publikacji: {{ car.data_publikacji|date:"j.m.Y" }} <br>
+                    </p>
+                    <div class="text-end">
+                        <small class="text-muted">{{ car.uzytkownik }}</small>
+                    </div>
+                    <div class="text-center m-3">
+                        <p class="text-danger text-center">Czy na pewno chcesz usunąć te ogłoszenie?</p>
+                        <button class="btn btn-danger m-1" type="submit">Usuń</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'MotoSell:opublikowane-uzytkownika'%}">Nie</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
